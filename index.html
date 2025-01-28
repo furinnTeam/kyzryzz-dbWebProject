@@ -1,79 +1,86 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login & Username</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <div class="theme-switcher">
-    <button id="themeToggle">Toggle Theme</button>
-  </div>
-  <div class="container">
-    <h1>Login</h1>
-    <form id="loginForm">
-      <label for="phone">Nomor Telepon</label>
-      <input type="text" id="phone" name="phone" placeholder="Contoh: 6281234567890" required>
-      <button type="submit">Login</button>
-    </form>
-    <div id="notRegistered" style="display: none;">
-      <p>Nomor telepon Anda belum terdaftar.</p>
-    </div>
+/* Global Styles */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  margin: 0;
+  padding: 0;
+  color: #000;
+  transition: background-color 0.3s, color 0.3s;
+}
 
-    <h1>Buat Username</h1>
-    <form id="createUserForm">
-      <label for="username">Masukkan Username</label>
-      <input type="text" id="username" name="username" placeholder="Username" required>
-      <button type="submit">Buat Username</button>
-    </form>
-    <div id="result" style="display: none;">
-      <p id="successMessage">Sukses menambahkan username!</p>
-    </div>
-  </div>
+.container {
+  max-width: 500px;
+  margin: 50px auto;
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
 
-  <script>
-    document.getElementById('loginForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const phone = document.getElementById('phone').value;
+h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  text-align: center;
+}
 
-      const response = await fetch('/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ phone })
-      });
+form label {
+  display: block;
+  margin: 10px 0 5px;
+}
 
-      const result = await response.json();
-      if (result.status === 'not_registered') {
-        document.getElementById('notRegistered').style.display = 'block';
-      } else {
-        alert(result.message);
-        document.getElementById('notRegistered').style.display = 'none';
-      }
-    });
+form input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
 
-    document.getElementById('createUserForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const username = document.getElementById('username').value;
+form button {
+  width: 100%;
+  padding: 10px;
+  background: #007BFF;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
 
-      const response = await fetch('/create-username', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username })
-      });
+button:hover {
+  background: #0056b3;
+}
 
-      const result = await response.json();
-      if (result.status === 'success') {
-        document.getElementById('result').style.display = 'block';
-      } else {
-        alert('Gagal menambahkan username. Coba lagi nanti.');
-      }
-    });
-    
-    const themeToggle = document.getElementById('themeToggle');
-    themeToggle.addEventListener('click', () => {
-      document.body.classList.toggle('dark-theme');
-    });
-  </script>
-</body>
-</html>
+.theme-button {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  font-size: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+/* Dark Theme */
+body.dark-theme {
+  background-color: #2c2c2c;
+  color: #fff;
+}
+
+body.dark-theme .container {
+  background: #444;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-theme form input {
+  background: #555;
+  color: #fff;
+  border: 1px solid #777;
+}
+
+body.dark-theme form button {
+  background: #0056b3;
+}
+
+body.dark-theme button:hover {
+  background: #003f8a;
+}
