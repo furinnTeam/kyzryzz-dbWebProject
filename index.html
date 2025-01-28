@@ -7,6 +7,9 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <div class="theme-switcher">
+    <button id="themeToggle">Toggle Theme</button>
+  </div>
   <div class="container">
     <h1>Login</h1>
     <form id="loginForm">
@@ -16,27 +19,16 @@
     </form>
     <div id="notRegistered" style="display: none;">
       <p>Nomor telepon Anda belum terdaftar.</p>
-      <button onclick="redirectWhatsApp()">WhatsApp</button>
-      <button onclick="redirectTelegram()">Telegram</button>
     </div>
 
     <h1>Buat Username</h1>
-    <button id="createUserButton">Buat Username</button>
-    <div id="credentials" style="display: none;">
-      <p>
-        <strong>Username:</strong> <span id="username"></span> 
-        <button onclick="copyToClipboard('username')">Copy Username</button>
-      </p>
-      <div id="passwordOption" style="display: none;">
-        <p>Apakah Anda ingin menyalin password juga?</p>
-        <button id="fetchPasswordButton">Tampilkan Password</button>
-      </div>
-      <div id="passwordSection" style="display: none;">
-        <p>
-          <strong>Password:</strong> <span id="password"></span> 
-          <button onclick="copyToClipboard('password')">Copy Password</button>
-        </p>
-      </div>
+    <form id="createUserForm">
+      <label for="username">Masukkan Username</label>
+      <input type="text" id="username" name="username" placeholder="Username" required>
+      <button type="submit">Buat Username</button>
+    </form>
+    <div id="result" style="display: none;">
+      <p id="successMessage">Sukses menambahkan username!</p>
     </div>
   </div>
 
@@ -60,51 +52,28 @@
       }
     });
 
-    document.getElementById('createUserButton').addEventListener('click', async () => {
-      try {
-        const response = await fetch('/create-username');
-        const { username } = await response.json();
+    document.getElementById('createUserForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const username = document.getElementById('username').value;
 
-        document.getElementById('username').textContent = username;
-        document.getElementById('credentials').style.display = 'block';
-        document.getElementById('passwordOption').style.display = 'block';
-      } catch (error) {
-        alert('Gagal membuat username. Coba lagi nanti.');
-        console.error(error);
-      }
-    });
-
-    document.getElementById('fetchPasswordButton').addEventListener('click', async () => {
-      try {
-        const response = await fetch('/create-password');
-        const { password } = await response.json();
-
-        document.getElementById('password').textContent = password;
-        document.getElementById('passwordOption').style.display = 'none';
-        document.getElementById('passwordSection').style.display = 'block';
-      } catch (error) {
-        alert('Gagal mengambil password. Coba lagi nanti.');
-        console.error(error);
-      }
-    });
-
-    function redirectWhatsApp() {
-      window.open('https://wa.me/6285921655444', '_blank');
-    }
-
-    function redirectTelegram() {
-      window.open('https://t.me/kyzryzz', '_blank');
-    }
-
-    function copyToClipboard(elementId) {
-      const text = document.getElementById(elementId).textContent;
-      navigator.clipboard.writeText(text).then(() => {
-        alert(`${elementId.charAt(0).toUpperCase() + elementId.slice(1)} berhasil disalin.`);
-      }).catch(err => {
-        alert('Gagal menyalin teks.');
-        console.error(err);
+      const response = await fetch('/create-username', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username })
       });
-    }
+
+      const result = await response.json();
+      if (result.status === 'success') {
+        document.getElementById('result').style.display = 'block';
+      } else {
+        alert('Gagal menambahkan username. Coba lagi nanti.');
+      }
+    });
+    
+    const themeToggle = document.getElementById('themeToggle');
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark-theme');
+    });
   </script>
 </body>
 </html>
