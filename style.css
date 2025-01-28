@@ -36,7 +36,7 @@ form input {
   border-radius: 4px;
 }
 
-form button, button {
+form button {
   width: 100%;
   padding: 10px;
   background: #007BFF;
@@ -50,16 +50,14 @@ button:hover {
   background: #0056b3;
 }
 
-#credentials p {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.theme-switcher {
+.theme-button {
   position: fixed;
   top: 10px;
   right: 10px;
+  font-size: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
 }
 
 /* Dark Theme */
@@ -79,7 +77,7 @@ body.dark-theme form input {
   border: 1px solid #777;
 }
 
-body.dark-theme form button, body.dark-theme button {
+body.dark-theme form button {
   background: #0056b3;
 }
 
