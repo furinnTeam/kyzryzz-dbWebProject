@@ -5,45 +5,38 @@ const app = express();
 app.use(express.json());
 
 const PORT = 3000;
+const GITHUB_TOKEN = 'GANTI_DENGAN_TOKEN_GITHUB_ANDA';
+const OWNER = 'furinnTeam';
+const REPO = 'cft';
+const BRANCH = 'main';
 
-// Login endpoint
 app.post('/login', async (req, res) => {
   const { phone } = req.body;
-  try {
-    // Simulasi validasi nomor telepon
-    const registeredNumbers = ['6281234567890', '6285921655444']; // Replace dengan data asli
-    if (!registeredNumbers.includes(phone)) {
-      return res.json({ status: 'not_registered' });
-    }
-    res.json({ status: 'success', message: 'Login berhasil!' });
-  } catch (error) {
-    res.status(500).json({ status: 'error', message: 'Terjadi kesalahan server.' });
+  const registeredNumbers = ['6281234567890', '6285921655444'];
+
+  if (!registeredNumbers.includes(phone)) {
+    return res.json({ status: 'not_registered' });
   }
+  res.json({ status: 'success', message: 'Login berhasil!' });
 });
 
-// Create username endpoint
-app.get('/create-username', async (req, res) => {
+app.post('/create-username', async (req, res) => {
+  const { username } = req.body;
   try {
-    const response = await axios.get(
-      'https://raw.githubusercontent.com/furinnTeam/scriptSecurity/refs/heads/main/cft'
-    );
-    const { username } = response.data;
-    res.json({ username });
-  } catch (error) {
-    res.status(500).json({ message: 'Gagal mengambil username.' });
-  }
-});
+    const filePath = `usernames/${Date.now()}.txt`;
+    const content = Buffer.from(username).toString('base64');
 
-// Create password endpoint
-app.get('/create-password', async (req, res) => {
-  try {
-    const response = await axios.get(
-      'https://raw.githubusercontent.com/furinnTeam/scriptSecurity/refs/heads/main/cft'
-    );
-    const { password } = response.data;
-    res.json({ password });
+    await axios.put(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${filePath}`, {
+      message: `Menambahkan username: ${username}`,
+      content,
+      branch: BRANCH
+    }, {
+      headers: { Authorization: `Bearer ${GITHUB_TOKEN}` }
+    });
+
+    res.json({ status: 'success', message: 'Username berhasil ditambahkan!' });
   } catch (error) {
-    res.status(500).json({ message: 'Gagal mengambil password.' });
+    res.status(500).json({ status: 'error', message: 'Gagal menambahkan username.' });
   }
 });
 
