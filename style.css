@@ -42,7 +42,7 @@ form button {
   background: #007BFF;
   color: #fff;
   border: none;
-  border-radius: 4px;
+  border-radius: 1px;
   cursor: pointer;
 }
 
@@ -64,12 +64,12 @@ button:hover {
 }
 
 .theme-button:hover {
-  transform: scale(1.1);
+  transform: scale(1);
 }
 
 /* Tema Gelap */
 body.dark-theme {
-  background-color: #2c2c2c;
+  background-color: none;
   color: #ffffff;
 }
 
