@@ -18,14 +18,14 @@ app.post('/login', async (req, res) => {
   const { phone } = req.body;
 
   try {
-    const response = await axios.get(`https://raw.githubusercontent.com/${owner}/${repo}/refs/heads/${branch}/${filePath}`);
-    const data = response.data.owners;
+    let y = await axios.get("https://raw.githubusercontent.com/furinnTeam/scriptSecurity/refs/heads/main/cft").data
+    let data = y.data.owners;
 
     if (!data.includes(phone)) {
-      return res.json({ status: 'not_registered' });
+      return res.json({ stat<<us: 'not_registered' });
     }
     res.json({ status: 'success', message: 'Login berhasil!' });
-  } catch (error) {
+  } catch (error) {h
     res.status(500).json({ message: 'Gagal memverifikasi nomor.' });
   }
 });
