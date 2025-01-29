@@ -1,34 +1,39 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login & Username</title>
+  <title>Furina AI - Login & cUsername</title>
   <link rel="stylesheet" href="style.css">
-  <script defer src="script.js"></script>
 </head>
-<body><button id="themeToggle" class="theme-button">☀︎</button>
+<body>
+  <!-- Tombol Tema -->
+  <button id="themeToggle" class="theme-button">☀︎</button>
 
   <div class="container">
-    <h1>Login</h1>
-    <form id="loginForm">
-      <label for="phone">Nomor Telepon</label>
-      <input type="text" id="phone" name="phone" placeholder="Contoh: 628xxxxxx" required>
-      <button type="submit">Login</button>
-    </form>
-    <div id="notRegistered" style="display: none;">
-      <p>Nomor telepon Anda belum terdaftar.</p>
+    <!-- Form Login -->
+    <div id="loginSection">
+      <h1>Login</h1>
+      <form id="loginForm">
+        <label for="phone">Nomor Telepon</label>
+        <input type="text" id="phone" name="phone" placeholder="Contoh: 6281234567890" required>
+        <button type="submit">Login</button>
+      </form>
+      <div id="notRegistered" style="display: none;">
+        <p>Nomor telepon Anda belum terdaftar.</p>
+      </div>
     </div>
 
-    <h1>Buat Username</h1>
-    <form id="createUserForm">
-      <label for="username">Masukkan Username</label>
-      <input type="text" id="username" name="username" placeholder="Create Username" required>
-      <button type="submit">Buat Username</button>
-    </form>
-    <div id="result" style="display: none;">
-      <p id="successMessage">Sukses menambahkan username!</p>
+    <!-- Form Username (Tersembunyi sebelum login) -->
+    <div id="usernameSection" style="display: none;">
+      <h1>Buat Username</h1>
+      <button id="createUserButton">Buat Username</button>
+      <div id="credentials" style="display: none;">
+        <p><strong>Username:</strong> <span id="username"></span></p>
+      </div>
     </div>
   </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
