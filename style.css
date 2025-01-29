@@ -50,18 +50,17 @@ button:hover {
   background: #0056b3;
 }
 
-/* Gaya Tombol Tema */
+/* Gaya tombol tema */
 .theme-button {
   position: fixed;
   top: 10px;
   right: 10px;
-  font-size: 28px;
+  font-size: 24px;
   background: none;
   border: none;
   cursor: pointer;
-  padding: 10px;
-  transition: transform 0.2s;
-  color: #f4a261;
+  color: #f4a261; /* Warna untuk mode terang */
+  transition: transform 0.2s ease-in-out;
 }
 
 .theme-button:hover {
@@ -74,7 +73,6 @@ body.dark-theme {
   color: #ffffff;
 }
 
-body.dark-theme .container {
-  background: #444444;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+body.dark-theme .theme-button {
+  color: #FFD700; /* Warna emas untuk mode gelap */
 }
