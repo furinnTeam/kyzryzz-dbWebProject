@@ -3,11 +3,12 @@ const loginForm = document.getElementById('loginForm');
 const phoneInput = document.getElementById('phone');
 const loginSection = document.getElementById('loginSection');
 const usernameSection = document.getElementById('usernameSection');
-const createUserButton = document.getElementById('createUserButton');
-const credentials = document.getElementById('credentials');
-const usernameDisplay = document.getElementById('username');
-const ipOption = document.getElementById('ipOption');
+const usernameForm = document.getElementById('usernameForm');
+const newUsernameInput = document.getElementById('newUsername');
+const usernameResult = document.getElementById('usernameResult');
+const usernameDisplay = document.getElementById('usernameDisplay');
 const copyUsernameButton = document.getElementById('copyUsernameButton');
+const ipOption = document.getElementById('ipOption');
 const addIpButton = document.getElementById('addIpButton');
 
 themeToggle.addEventListener('click', () => {
@@ -20,10 +21,15 @@ loginForm.addEventListener('submit', async (e) => {
   const phone = phoneInput.value.trim();
 
   try {
-    const response = await fetch("https://raw.githubusercontent.com/furinnTeam/scriptSecurity/main/cft");
-    const data = await response.json();
+    const response = await fetch('/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ phone })
+    });
 
-    if (!data.owners.includes(phone)) { 
+    const result = await response.json();
+    
+    if (result.status === 'not_registered') {
       document.getElementById('notRegistered').style.display = 'block';
     } else {
       loginSection.style.display = 'none';
@@ -34,17 +40,34 @@ loginForm.addEventListener('submit', async (e) => {
   }
 });
 
-createUserButton.addEventListener('click', async () => {
-  try {
-    const response = await fetch('/create-username');
-    const { username } = await response.json();
+usernameForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const newUsername = newUsernameInput.value.trim();
 
-    usernameDisplay.textContent = username;
-    credentials.style.display = 'block';
-    copyUsernameButton.style.display = 'block';
-    ipOption.style.display = 'block';
+  if (!newUsername) {
+    alert('Masukkan username terlebih dahulu!');
+    return;
+  }
+
+  try {
+    const response = await fetch('/create-username', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username: newUsername })
+    });
+
+    const result = await response.json();
+    
+    if (result.status === 'success') {
+      usernameDisplay.textContent = newUsername;
+      usernameResult.style.display = 'block';
+      copyUsernameButton.style.display = 'block';
+      ipOption.style.display = 'block';
+    } else {
+      alert('Gagal menambahkan username.');
+    }
   } catch (error) {
-    alert('Gagal membuat username. Coba lagi nanti.');
+    alert('Terjadi kesalahan saat menambahkan username.');
   }
 });
 
@@ -56,17 +79,23 @@ copyUsernameButton.addEventListener('click', () => {
 
 addIpButton.addEventListener('click', async () => {
   try {
-    const ip = await fetch('https://api64.ipify.org?format=json').then(res => res.json()).then(data => data.ip);
-    const url = 'http://accip.nvlgroup.my.id/api/Kyzry/ip';
+    const ip = await fetch('https://api64.ipify.org?format=json')
+      .then(res => res.json())
+      .then(data => data.ip);
 
-    const response = await fetch(url, {
+    const response = await fetch('http://accip.nvlgroup.my.id/api/Kyzry/ip', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ ip_address: ip })
     });
 
     const result = await response.json();
-    alert(result ? `IP ${ip} berhasil ditambahkan.` : `Gagal menambahkan IP ${ip}.`);
+    
+    if (result) {
+      alert(`IP ${ip} berhasil ditambahkan.`);
+    } else {
+      alert(`Gagal menambahkan IP ${ip}.`);
+    }
   } catch (error) {
     alert('Terjadi kesalahan saat menambahkan IP.');
   }
