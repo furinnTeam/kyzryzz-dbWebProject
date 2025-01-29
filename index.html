@@ -18,7 +18,7 @@
         <button type="submit">Login</button>
       </form>
       <div id="notRegistered" style="display: none;">
-        <p>Nomor telepon Anda belum terdaftar. silakan hubungi Owner!</p>
+        <p>Nomor telepon Anda belum terdaftar. Silakan hubungi Owner!</p>
         <button onclick="redirectWhatsApp()">Hubungi di WhatsApp</button>
         <button onclick="redirectTelegram()">Hubungi di Telegram</button>
       </div>
@@ -28,7 +28,7 @@
       <h1>Buat Username</h1>
       <form id="usernameForm">
         <label for="newUsername">Masukkan Username</label>
-        <input type="text" id="newUsername" name="newUsername" placeholder="buat username anda" required>
+        <input type="text" id="newUsername" name="newUsername" placeholder="Buat username Anda" required>
         <button type="submit">Tambahkan Username</button>
       </form>
       <div id="usernameResult" style="display: none;">
@@ -42,6 +42,16 @@
     </div>
   </div>
 
+  <script>
+    function redirectWhatsApp() {
+      window.location.href = "https://wa.me/6285921655444"; 
+    }
+
+    function redirectTelegram() {
+      window.location.href = "https://t.me/kyzryzz";
+    }
+  </script>
+  
   <script src="script.js"></script>
 </body>
 </html>
