@@ -16,23 +16,42 @@
       <h1>Login</h1>
       <form id="loginForm">
         <label for="phone">Nomor Telepon</label>
-        <input type="text" id="phone" name="phone" placeholder="Contoh: 6281234567890" required>
+        <input type="text" id="phone" name="phone" placeholder="Contoh: 628xxxxxxxx" required>
         <button type="submit">Login</button>
       </form>
       <div id="notRegistered" style="display: none;">
-        <p>Nomor telepon Anda belum terdaftar.</p>
-      </div>
+      <p>Nomor telepon Anda belum terdaftar.</p>
+      <button onclick="redirectWhatsApp()">WhatsApp</button>
+      <button onclick="redirectTelegram()">Telegram</button>
     </div>
-
+    </div>
     <!-- Form Username (Tersembunyi sebelum login) -->
     <div id="usernameSection" style="display: none;">
       <h1>Buat Username</h1>
       <button id="createUserButton">Buat Username</button>
       <div id="credentials" style="display: none;">
-        <p><strong>Username:</strong> <span id="username"></span></p>
+        <strong>Username:</strong> <span id="username"></span> 
+        <button onclick="copyToClipboard('username')">Copy Username</button>
       </div>
     </div>
   </div>
+
+    function redirectWhatsApp() {
+      window.open('https://wa.me/6285921655444', '_blank');
+    }
+
+    function redirectTelegram() {
+      window.open('https://t.me/kyzryzz', '_blank');
+    }
+
+    function copyToClipboard(elementId) {
+      const text = document.getElementById(elementId).textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        alert(`${elementId.charAt(0).toUpperCase() + elementId.slice(1)} berhasil disalin.`);
+      }).catch(err => {
+        alert('Gagal menyalin teks.');
+        console.error(err);
+      });
 
   <script src="script.js"></script>
 </body>
