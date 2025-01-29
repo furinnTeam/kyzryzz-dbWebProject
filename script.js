@@ -10,7 +10,7 @@ const usernameDisplay = document.getElementById('usernameDisplay');
 const copyUsernameButton = document.getElementById('copyUsernameButton');
 const ipOption = document.getElementById('ipOption');
 const addIpButton = document.getElementById('addIpButton');
-const fetch = require("node-fetch");
+const notRegistered = document.getElementById('notRegistered');
 
 themeToggle.addEventListener('click', () => {
   document.body.classList.toggle('dark-mode');
@@ -25,13 +25,12 @@ loginForm.addEventListener('submit', async (e) => {
     const response = await fetch('/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ phone })
+      body: JSON.stringify({ phone }),
     });
+    const data = await response.json();
 
-    const result = await response.json();
-    
-    if (result.status === 'not_registered') {
-      document.getElementById('notRegistered').style.display = 'block';
+    if (data.status === 'not_registered') {
+      notRegistered.style.display = 'block';
     } else {
       loginSection.style.display = 'none';
       usernameSection.style.display = 'block';
@@ -45,30 +44,24 @@ usernameForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   const newUsername = newUsernameInput.value.trim();
 
-  if (!newUsername) {
-    alert('Masukkan username terlebih dahulu!');
-    return;
-  }
-
   try {
     const response = await fetch('/create-username', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username: newUsername })
+      body: JSON.stringify({ newUsername }),
     });
+    const data = await response.json();
 
-    const result = await response.json();
-    
-    if (result.status === 'success') {
-      usernameDisplay.textContent = newUsername;
+    if (data.status === 'success') {
+      usernameDisplay.textContent = data.username;
       usernameResult.style.display = 'block';
       copyUsernameButton.style.display = 'block';
       ipOption.style.display = 'block';
     } else {
-      alert('Gagal menambahkan username.');
+      alert('Gagal menambahkan username. Coba lagi nanti.');
     }
   } catch (error) {
-    alert('Terjadi kesalahan saat menambahkan username.');
+    alert('Gagal menambahkan username. Coba lagi nanti.');
   }
 });
 
@@ -81,22 +74,18 @@ copyUsernameButton.addEventListener('click', () => {
 addIpButton.addEventListener('click', async () => {
   try {
     const ip = await fetch('https://api64.ipify.org?format=json')
-      .then(res => res.json())
-      .then(data => data.ip);
+      .then((res) => res.json())
+      .then((data) => data.ip);
+    const url = 'http://accip.nvlgroup.my.id/api/Kyzry/ip';
 
-    const response = await fetch('http://accip.nvlgroup.my.id/api/Kyzry/ip', {
+    const response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ip_address: ip })
+      body: JSON.stringify({ ip_address: ip }),
     });
 
     const result = await response.json();
-    
-    if (result) {
-      alert(`IP ${ip} berhasil ditambahkan.`);
-    } else {
-      alert(`Gagal menambahkan IP ${ip}.`);
-    }
+    alert(result ? `IP ${ip} berhasil ditambahkan.` : `Gagal menambahkan IP ${ip}.`);
   } catch (error) {
     alert('Terjadi kesalahan saat menambahkan IP.');
   }
