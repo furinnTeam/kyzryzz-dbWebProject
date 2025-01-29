@@ -6,44 +6,68 @@ const usernameSection = document.getElementById('usernameSection');
 const createUserButton = document.getElementById('createUserButton');
 const credentials = document.getElementById('credentials');
 const usernameDisplay = document.getElementById('username');
-const axios = require('axios');
-
-if (localStorage.getItem('theme') === 'dark') {
-  document.body.classList.add('dark-theme');
-  themeToggle.textContent = '☽';
-}
+const ipOption = document.getElementById('ipOption');
+const copyUsernameButton = document.getElementById('copyUsernameButton');
+const addIpButton = document.getElementById('addIpButton');
 
 themeToggle.addEventListener('click', () => {
-  document.body.classList.toggle('dark-theme');
-  const isDark = document.body.classList.contains('dark-theme');
-
-  themeToggle.textContent = isDark ? '☽' : '☀︎';
-  localStorage.setItem('theme', isDark ? 'dark' : 'light');
+  document.body.classList.toggle('dark-mode');
+  themeToggle.textContent = document.body.classList.contains('dark-mode') ? '☽' : '☀︎';
 });
 
-/* login nomor */
 loginForm.addEventListener('submit', async (e) => {
   e.preventDefault();
-    const response = await axios.get("https://raw.githubusercontent.com/furinnTeam/scriptSecurity/refs/heads/main/cft");
- 
   const phone = phoneInput.value.trim();
-  if (response.data.owners.includes(phone));
- {
-    document.getElementById('notRegistered').style.display = 'block';
-    return;
-  }
 
-  loginSection.style.display = 'none';
-  usernameSection.style.display = 'block';
+  try {
+    const response = await fetch("https://raw.githubusercontent.com/furinnTeam/scriptSecurity/main/cft");
+    const data = await response.json();
+
+    if (!data.owners.includes(phone)) { 
+      document.getElementById('notRegistered').style.display = 'block';
+    } else {
+      loginSection.style.display = 'none';
+      usernameSection.style.display = 'block';
+    }
+  } catch (error) {
+    alert('Terjadi kesalahan saat memverifikasi nomor.');
+  }
 });
 
 createUserButton.addEventListener('click', async () => {
   try {
-    const username = `user${Math.floor(Math.random() * 10000)}`;
+    const response = await fetch('/create-username');
+    const { username } = await response.json();
+
     usernameDisplay.textContent = username;
     credentials.style.display = 'block';
+    copyUsernameButton.style.display = 'block';
+    ipOption.style.display = 'block';
   } catch (error) {
     alert('Gagal membuat username. Coba lagi nanti.');
-    console.error(error);
+  }
+});
+
+copyUsernameButton.addEventListener('click', () => {
+  navigator.clipboard.writeText(usernameDisplay.textContent).then(() => {
+    alert('Username berhasil disalin!');
+  });
+});
+
+addIpButton.addEventListener('click', async () => {
+  try {
+    const ip = await fetch('https://api64.ipify.org?format=json').then(res => res.json()).then(data => data.ip);
+    const url = 'http://accip.nvlgroup.my.id/api/Kyzry/ip';
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ip_address: ip })
+    });
+
+    const result = await response.json();
+    alert(result ? `IP ${ip} berhasil ditambahkan.` : `Gagal menambahkan IP ${ip}.`);
+  } catch (error) {
+    alert('Terjadi kesalahan saat menambahkan IP.');
   }
 });
