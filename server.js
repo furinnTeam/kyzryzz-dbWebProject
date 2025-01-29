@@ -19,7 +19,7 @@ app.post('/login', async (req, res) => {
 
   try {
     const response = await axios.get(`https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${filePath}`);
-    const data = response.data;
+    const data = response.data.owners;
 
     if (!data.includes(phone)) {
       return res.json({ status: 'not_registered' });
@@ -42,7 +42,7 @@ app.post('/create-username', async (req, res) => {
       },
     });
 
-    const content = Buffer.from(fileResponse.data.content, 'base64').toString('utf-8');
+    const content = Buffer.from(fileResponse.data.username, 'base64').toString('utf-8');
     const updatedContent = `${content}\n${newUsername}`;
     const base64Content = Buffer.from(updatedContent).toString('base64');
 
