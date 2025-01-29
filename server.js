@@ -18,7 +18,7 @@ app.post('/login', async (req, res) => {
   const { phone } = req.body;
 
   try {
-    const response = await axios.get(`https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${filePath}`);
+    const response = await axios.get(`https://raw.githubusercontent.com/${owner}/${repo}/refs/heads/${branch}/${filePath}`);
     const data = response.data.owners;
 
     if (!data.includes(phone)) {
