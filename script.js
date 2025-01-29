@@ -10,6 +10,7 @@ const usernameDisplay = document.getElementById('usernameDisplay');
 const copyUsernameButton = document.getElementById('copyUsernameButton');
 const ipOption = document.getElementById('ipOption');
 const addIpButton = document.getElementById('addIpButton');
+const fetch = require("node-fetch");
 
 themeToggle.addEventListener('click', () => {
   document.body.classList.toggle('dark-mode');
