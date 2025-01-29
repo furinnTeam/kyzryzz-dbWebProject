@@ -5,38 +5,35 @@ const app = express();
 app.use(express.json());
 
 const PORT = 3000;
-const GITHUB_TOKEN = 'GANTI_DENGAN_TOKEN_GITHUB_ANDA';
-const OWNER = 'furinnTeam';
-const REPO = 'cft';
-const BRANCH = 'main';
+const githubToken = `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`;
+const owner = 'furinnTeam';
+const repo = 'scriptSecurity';
+const branch = 'main';
 
 app.post('/login', async (req, res) => {
-  const { phone } = req.body;
-  const registeredNumbers = ['6281234567890', '6285921655444'];
+  const { phone } = req.body; 
 
-  if (!registeredNumbers.includes(phone)) {
-    return res.json({ status: 'not_registered' });
+  try {
+    const response = await axios.get("https://raw.githubusercontent.com/furinnTeam/scriptSecurity/main/cft");
+
+    if (!response.data.owners.includes(phone)) {
+      return res.json({ status: 'not_registered' });
+    }
+    res.json({ status: 'success', message: 'Login berhasil!' });
+  } catch (error) {
+    res.status(500).json({ message: 'Gagal memverifikasi nomor.' });
   }
-  res.json({ status: 'success', message: 'Login berhasil!' });
 });
 
-app.post('/create-username', async (req, res) => {
-  const { username } = req.body;
+app.get('/create-username', async (req, res) => {
   try {
-    const filePath = `usernames/${Date.now()}.txt`;
-    const content = Buffer.from(username).toString('base64');
-
-    await axios.put(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${filePath}`, {
-      message: `Menambahkan username: ${username}`,
-      content,
-      branch: BRANCH
-    }, {
-      headers: { Authorization: `Bearer ${GITHUB_TOKEN}` }
-    });
-
-    res.json({ status: 'success', message: 'Username berhasil ditambahkan!' });
+    const response = await axios.get(
+      'https://raw.githubusercontent.com/furinnTeam/scriptSecurity/main/cft'
+    );
+    const { username } = response.data;
+    res.json({ username });
   } catch (error) {
-    res.status(500).json({ status: 'error', message: 'Gagal menambahkan username.' });
+    res.status(500).json({ message: 'Gagal mengambil username.' });
   }
 });
 
