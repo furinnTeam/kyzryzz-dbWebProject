@@ -26,10 +26,14 @@
 
     <div id="usernameSection" style="display: none;">
       <h1>Buat Username</h1>
-      <button id="createUserButton">Buat Username</button>
-      <div id="credentials" style="display: none;">
-        <p><strong>Username:</strong> <span id="username"></span></p>
-        <button id="copyUsernameButton" style="display: none;">Copy Username</button>
+      <form id="usernameForm">
+        <label for="newUsername">Masukkan Username</label>
+        <input type="text" id="newUsername" name="newUsername" placeholder="Masukkan username" required>
+        <button type="submit">Tambahkan Username</button>
+      </form>
+      <div id="usernameResult" style="display: none;">
+        <p><strong>Username berhasil ditambahkan:</strong> <span id="usernameDisplay"></span></p>
+        <button id="copyUsernameButton">Copy Username</button>
         <div id="ipOption" style="display: none;">
           <p>Tambahkan IP Address:</p>
           <button id="addIpButton">Tambahkan IP</button>
